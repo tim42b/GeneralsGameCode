@@ -237,18 +237,18 @@ static void startOnline( void )
 
 static std::string trim(std::string s, const std::string& delim)
 {
-	unsigned int i;
-	i = s.find_first_not_of(delim);
-	if (i != s.npos)
-	{
-		s = s.substr(i);
-	}
+unsigned int i;
+i = s.find_first_not_of(delim);
+if (i != s.npos)
+{
+s = s.substr(i);
+}
 
-	i = s.find_last_not_of(delim);
-	if (i>=0 && i<s.npos)
-	{
-		s = s.substr(0, i+1);
-	}
+i = s.find_last_not_of(delim);
+if (i != s.npos)
+{
+s = s.substr(0, i + 1);
+}
 
 	return s;
 }
