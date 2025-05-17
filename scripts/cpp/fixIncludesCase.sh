@@ -31,7 +31,7 @@ Details:
 Script tries to find included file in include paths. (first relative to source
 file's directory, then in specified include paths). First it tries
 case-sensitive search in all paths. If that fails, it tries case-insensitive
-search in all include paths (excpet for nofix paths). If it succseeds, it fixes
+search in all include paths (except for nofix paths). If it succeeds, it fixes
 filename in include directory as necessary. If it fails no change is done.
 Slashes are fixed either way, if necessary ( \\ -> / ).
 
