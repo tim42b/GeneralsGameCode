@@ -354,11 +354,12 @@ void PerfGather::reset()
 {
 	PerfGather::termPerfDump();
 
-	strcpy(s_buf, fname);
+    // copy path into buffer with bounds checking
+    strncpy(s_buf, fname, sizeof(s_buf) - 1);
+    s_buf[sizeof(s_buf) - 1] = '\0';
 
-	char tmp[256];
-	strcpy(tmp, s_buf);
-	strcat(tmp, ".csv");
+    char tmp[256];
+    snprintf(tmp, sizeof(tmp), "%s.csv", s_buf);
 
 	s_perfStatsFile = fopen(tmp, "w");
 	s_perfDumpOptions = options;
