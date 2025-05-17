@@ -73,8 +73,11 @@
 #endif
 
 
-static Script *s_mtScript = NULL;
-static ScriptGroup *s_mtGroup = NULL;
+//
+// Temporary objects used when recovering from inconsistent save data. These
+// were previously allocated on the heap and intentionally leaked.  Use stack
+// instances instead so recovery no longer leaks memory.
+//
 
 //
 // These strings must be in the same order as they are in their definitions 
@@ -274,12 +277,12 @@ void ScriptList::xfer( Xfer *xfer )
 		if (scriptCount==0) break;
 	}
 	if (scriptCount>0) {
-		DEBUG_CRASH(("Stripping out extra scripts - Bad..."));
-		if (s_mtScript==NULL) s_mtScript = newInstance(Script);	// Yes it leaks, but this is unusual recovery only. jba.
-		while (scriptCount) {
-			xfer->xferSnapshot(s_mtScript);
-			scriptCount--;
-		}
+                DEBUG_CRASH(("Stripping out extra scripts - Bad..."));
+                Script mtScript; // temporary for recovery
+                while (scriptCount) {
+                        xfer->xferSnapshot(&mtScript);
+                        scriptCount--;
+                }
 	}
 
 	// count of script groups
@@ -302,13 +305,14 @@ void ScriptList::xfer( Xfer *xfer )
 		scriptGroupCount--;
 		if (scriptGroupCount==0) break;
 	}
-	if (scriptGroupCount>0) {
-		DEBUG_CRASH(("Stripping out extra groups. - Bad..."));
-		if (s_mtGroup == NULL) s_mtGroup = newInstance(ScriptGroup);	// Yes it leaks, but this is only for recovery.
-		while (scriptGroupCount) {
-			xfer->xferSnapshot(s_mtGroup);
-			scriptGroupCount--;
-		}
+        if (scriptGroupCount>0) {
+                DEBUG_CRASH(("Stripping out extra groups. - Bad..."));
+                ScriptGroup mtGroup; // temporary for recovery
+                while (scriptGroupCount) {
+                        xfer->xferSnapshot(&mtGroup);
+                        scriptGroupCount--;
+                }
+        }
 	}
 
 }
@@ -715,12 +719,12 @@ void ScriptGroup::xfer( Xfer *xfer )
 		if (scriptCount==0) break;
 	}
 	if (scriptCount>0) {
-		DEBUG_CRASH(("Stripping out extra scripts - Bad..."));
-		if (s_mtScript==NULL) s_mtScript = newInstance(Script);	// Yes it leaks, but this is unusual recovery only. jba.
-		while (scriptCount) {
-			xfer->xferSnapshot(s_mtScript);
-			scriptCount--;
-		}
+                DEBUG_CRASH(("Stripping out extra scripts - Bad..."));
+                Script mtScript; // temporary for recovery
+                while (scriptCount) {
+                        xfer->xferSnapshot(&mtScript);
+                        scriptCount--;
+                }
 	}
 
 }  // end xfer
